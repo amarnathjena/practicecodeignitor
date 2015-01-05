@@ -24,7 +24,7 @@ class Amar extends CI_Controller {
         $checkindate = "2015-01-06";
         $checkoutdate = "2015-01-07";
         $country = "India";
-        $city = "mumbai";
+        $city = "mumbai"; // Bangalore, delhi, kochi area, etc... this will be given by api creater
         $city_code = "10438";
         $NoOfRooms = 1;
         $NoOfAdults = 1;
