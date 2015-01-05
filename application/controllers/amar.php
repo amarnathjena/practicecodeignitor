@@ -7,18 +7,20 @@ class Amar extends CI_Controller {
     
     public function __construct() {
         parent::__construct();
-        $this->load->helper('url');
-        $this->load->library('form_validation');
+//        $this->load->helper('url');
+//        $this->load->library('form_validation');
+        //Here is code to restrict unauthorised user
+        if(!$this->session->userdata('id'))
+            redirect ('login');
+        
         $this->load->model('user','',TRUE);
     }
 
     public function index() {
         
         include_once APPPATH."includes/xmlparser.php";
-        error_reporting(E_ALL);
-        ini_set("display_errors", "Off");
-        $username = "ADD USERNAME";
-	$password = "ADD PASSWORD";
+        $username = "slvtours";
+	$password = "travel@1234";
         $checkindate = "2015-01-06";
         $checkoutdate = "2015-01-07";
         $country = "India";
