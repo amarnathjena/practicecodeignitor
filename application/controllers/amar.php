@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class Amar extends CI_Controller {
-    
+     
     public function __construct() {
         parent::__construct();
 //        $this->load->helper('url');
@@ -19,8 +19,8 @@ class Amar extends CI_Controller {
     public function index() {
         
         include_once APPPATH."includes/xmlparser.php";
-        $username = "slvtours";
-	$password = "travel@1234";
+        $username = "ADD USERNAME";
+	$password = "ADD PASSWORD";
         $checkindate = "2015-01-06";
         $checkoutdate = "2015-01-07";
         $country = "India";
