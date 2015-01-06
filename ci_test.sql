@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 05, 2015 at 06:53 AM
+-- Generation Time: Jan 06, 2015 at 07:08 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -260,17 +260,35 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `dob` date NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `mobile` bigint(20) NOT NULL,
+  `permanent_address` text NOT NULL,
+  `current_address` text NOT NULL,
+  `organization` varchar(100) NOT NULL,
+  `department` varchar(100) NOT NULL,
+  `designation` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'admin', 'e6e061838856bf47e1de730719fb2609');
+INSERT INTO `users` (`id`, `username`, `password`, `name`, `dob`, `email`, `mobile`, `permanent_address`, `current_address`, `organization`, `department`, `designation`) VALUES
+(1, 'admin', 'e6e061838856bf47e1de730719fb2609', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(2, 'amar', '96e79218965eb72c92a549dd5a330112', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(3, 'suraj', '93279e3308bdbbeed946fc965017f67a', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(4, 'asish', '02c479c892e26dfedfb21cb9188e4aa9', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(5, 'sambit', 'cfb04ebd896e32432174937a2c726ea2', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(6, 'diptendu', '622b06b47f35aff1c472127ba964d92f', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(7, 'alokkumar', '97d1461381ef88b3ec7fd5ac04c6a230', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(8, 'ranjan', 'a7cd2205b8031f5858acdfb9eb7d9952', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(9, 'rajeev', 'a675ffb2ec24936fba6e16d5f384578f', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(10, 'bishnu', '7d00149ea591e129b82d151c6d9062fb', '', '0000-00-00', '', 0, '', '', '', '', ''),
+(11, 'subharam', '5c2afbf640aa2b6ced57422e560bb007', '', '0000-00-00', '', 0, '', '', '', '', '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
