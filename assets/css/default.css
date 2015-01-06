@@ -96,9 +96,34 @@ root {
 .pagination_box a:hover,.pagination_box a:active,.pagination_box a.page_current {
     background:#fff; color:black!important;
 }
-/****************************Pagination**************************/
+/****************************Pagination END**************************/
 
-.tbl{
-    width:98%;
+/****************************Table*********************************/
+.tbl_list{
+    width:100%;
     height:100px;
 }
+table tr td.slct_bg{background: #ECA886!important;color: #fff!important; font-weight: bold;}
+table tr td a.slct_bg{background: #ECA886!important;color: #fff!important; font-weight: bold;}
+.tbl_list tr th[align="left"] {text-align: left;}
+.tbl_list tr th {
+	background: #00396E;
+	color: #fff;
+	padding: 4px;
+}
+.tbl_list tr td {
+	padding: 4px;
+}
+.tbl_list tr:nth-child(even) td {
+	background: #DFE4EA;
+}
+.tbl_list tr td:nth-child(odd){
+	text-align: right;
+}
+.tbl_list tr td:nth-child(even){
+	text-align: left;
+}
+.tbl_list tr td input, textarea{
+	width:100%;
+}
+/****************************Table END*********************************/

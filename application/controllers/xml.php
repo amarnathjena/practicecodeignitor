@@ -1,168 +1,130 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-error_reporting(E_ALL);
-ini_set("display_errors", "On");
-class Xml extends CI_Controller {
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Amar extends CI_Controller {
+     
+    public function __construct() {
+        parent::__construct();
+//        $this->load->helper('url');
+//        $this->load->library('form_validation');
+        //Here is code to restrict unauthorised user
+        if(!$this->session->userdata('id'))
+            redirect ('login');
+        
+        $this->load->model('user','',TRUE);
+    }
+
+    public function index() {
+        
+        include_once APPPATH."includes/xmlparser.php";
+        $username = "ADD USERNAME";
+	$password = "ADD PASSWORD";
+        $checkindate = "2015-01-06";
+        $checkoutdate = "2015-01-07";
+        $country = "India";
+        $city = "mumbai"; // Bangalore, delhi, kochi area, etc... this will be given by api creater
+        $city_code = "10438"; // 10391, 10409, 10427, etc...
+        $NoOfRooms = 1;
+        $NoOfAdults = 1;
+        $NoOfChild = 0;
+        if (strtolower($country) == 'india') {
+            $domestic = "true";
+        } else {
+            $domestic = "false";
+        }
+
+        $src_xml = "<soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>
+                        <soap:Header>
+                        <AuthenticationData xmlns='http://TekTravel/HotelBookingApi'>
+                        <UserName>$username</UserName>
+                        <Password>$password</Password>
+                        </AuthenticationData>
+                        </soap:Header>
+                        <soap:Body>
+                        <Search xmlns='http://TekTravel/HotelBookingApi'>
+                        <request>
+                        <CheckInDate>$checkindate</CheckInDate>
+                        <CheckOutDate>$checkoutdate</CheckOutDate>
+                        <CountryName>$country</CountryName>
+                        <IsDomestic>$domestic</IsDomestic>
+                        <CityReference>$city</CityReference>
+                        <CityId>$city_code</CityId>
+                        <NoOfRooms>$NoOfRooms</NoOfRooms>
+                        <RoomGuest>
+                        <WSRoomGuestData>
+                        <NoOfAdults>$NoOfAdults</NoOfAdults>
+                        <NoOfChild>$NoOfChild</NoOfChild>
+                        <ChildAge>";
+        if ($NoOfChild > 0) {
+            $NoOfChild_r_c = count($this->input->post('ChildAge_r'));
+            $childage = $this->input->post('ChildAge_r');
+            for ($j = 1; $j <= $NoOfChild_r_c; $j++) {
+                $childage_i = (integer) $childage[$i];
+                $src_xml .="<int>$childage_i</int> ";
+            }
+        } else {
+            $src_xml .="<int>0</int>";
+        }
+        $src_xml .= " 				
+                        </ChildAge>
+                        </WSRoomGuestData>";
+
+        if ($NoOfRooms > 1 && $NoOfAdults) {
+            
+            for ($i = 0; $i < $NoOfAdults; $i++) {
+
+                $NoOfAdults_i = intval($NoOfAdults[$i]);
+                $NoOfChild_i = intval($NoOfChild[$i]);
+
+                $src_xml .= "					
+                            <WSRoomGuestData>
+                            <NoOfAdults>$NoOfAdults_i</NoOfAdults>
+                            <NoOfChild>$NoOfChild_i</NoOfChild>
+                            <ChildAge>
+                            <int>0</int>
+                            </ChildAge>
+                            </WSRoomGuestData>";
+            }
+        }
+        $src_xml .="
+                    </RoomGuest>
+                    <HotelName/>
+                    <Rating>All</Rating>
+                    </request>
+                    </Search>
+                    </soap:Body>
+                    </soap:Envelope>";
+
+        $url = "http://api.tektravels.com/tbohotelapi_v6/hotelservice.asmx?wsdl";
+
+        $curl_handle = curl_init($url);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curl_handle, CURLOPT_POST, 1);
+        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+        curl_setopt($curl_handle, CURLOPT_ENCODING, "gzip");
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $src_xml);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+        $buffer = curl_exec($curl_handle);
+
+        curl_close($curl_handle);
+        
+        $xmlDoc = new Domdocument();
+        
+        $parse = $xmlDoc->loadXML($buffer);
+        
+        $hresult = $xmlDoc->getElementsByTagName("SearchResponse")->item(0)->getElementsByTagName("SearchResult")->item(0)->getElementsByTagName("Result")->item(0)->getElementsByTagName("WSHotelResult");
+        $tboSessionId = $xmlDoc->getElementsByTagName("SearchResponse")->item(0)->getElementsByTagName("SearchResult")->item(0)->getElementsByTagName("SessionId")->item(0)->nodeValue;
+
+        $data['hotel_res'] = $hresult;
+        $data['tboSessionId'] = $tboSessionId;
+        $this->load->view('search_response', $data);
+    }
     
-    function getDetails($noofrooms, $Adultcount, $Childcount, $Agebox1, $Agebox2){
-        $string = "";
-        $varchildrepeter = 0;
-        for ($i = 0; $i < $noofrooms; $i++){
-            $string.="<guestDetails>";
-            $string.="<adults>" . $Adultcount[$i] . "</adults>";
-            $countcb = $this->getChildage($Childcount[$i], $Agebox1, $Agebox2, $i);
-            $string.=$countcb;
-            $string.="</guestDetails>";
-            $varchildrepeter++;
-        }
-        return $string;
-    }
-    function getChildage($chcount, $Age1, $Age2, $roomindex){
-        $string2 = "";
-        $string2.="<child>";
-        if ($roomindex == 0){//for first room
-            if ($chcount == 1){
-                $string2.="<age>" . $Age1[0] . "</age>";
-            }
-            if ($chcount == 2){
-                $string2.="<age>" . $Age1[0] . "</age>" . "<age>" . $Age2[0] . "</age>";
-            }
-        }
-        if ($roomindex == 1){//for Second room
-            if ($chcount == 1){
-                $string2.="<age>" . $Age1[1] . "</age>";
-            }
-            if ($chcount == 2){
-                $string2.="<age>" . $Age1[1] . "</age>" . "<age>" . $Age2[1] . "</age>";
-            }
-        }
-        if ($roomindex == 2){//for third room
-            if ($chcount == 1){
-                $string2.="<age>" . $Age1[2] . "</age>";
-            }
-            if ($chcount == 2){
-                $string2.="<age>" . $Age1[2] . "</age>" . "<age>" . $Age2[2] . "</age>";
-            }
-        }
-        if ($roomindex == 3){//for forth room
-            if ($chcount == 1){
-                $string2.="<age>" . $Age1[3] . "</age>";
-            }
-            if ($chcount == 2){
-                $string2.="<age>" . $Age1[3] . "</age>" . "<age>" . $Age2[3] . "</age>";
-            }
-        } 
-        $string2.="</child>";
-        return $string2;
+    function get_hotel_details(){
+        echo "You are inside : <strong>".__CLASS__."</strong> class and method as : <strong>".__FUNCTION__."()</strong>";
     }
 
-    public function index(){
-		
-        $cin = "04/01/2015";
-        $cout = "05/01/2015";
-        $totaladult = 1;
-        $totalchid = 0;
-        $norooms = 1;
-        $city="Mumbai";
-        $dummy_ageofchild = 2;
-        $countchildbeds = 0;
-
-        $getdetails = $this->getDetails($norooms, $totaladult, $totalchid, $dummy_ageofchild, $dummy_ageofchild);
-        pr($getdetails, 1);
-        $checkin=$cin;
-        $checkout=$cout;
-
-        $xml_data='<arzHotelAvailReq>
-            <clientInfo>
-                <username>IndiaTripXML</username>
-                <userType>ArzooHWS1.1</userType>
-                <userID>57345</userID>
-                <password>*F85AE6397FF7F5AE19CBDCF84F2852960E6003A4</password>
-                <partnerID>100200</partnerID>
-            </clientInfo>
-            <requestSegment>
-                <currency>INR</currency>
-                <searchType>search</searchType>
-                <residentOfIndia>true</residentOfIndia>
-                <stayDateRange>
-                    <start>'.$checkin.'</start>
-                    <end>'.$checkout.'</end>
-                </stayDateRange>
-                <roomStayCandidate>';
-        $xml_data.=$getdetails;
-        $xml_data.='</roomStayCandidate>
-                <hotelSearchCriteria>
-                    <hotelCityName>'.$city.'</hotelCityName>
-                    <hotelName></hotelName>
-                    <area></area>
-                    <attraction></attraction>
-                    <rating></rating>
-                    <sortingPreference>3</sortingPreference>
-                    <hotelPackage>N</hotelPackage>
-                </hotelSearchCriteria>
-            </requestSegment>
-        </arzHotelAvailReq>';
-
-        //echo $xml_data;//exit('');
-
-        $wsdl='http://live.arzoo.com/HotelWS1.1/services/HotelAvailSearch?wsdl';
-
-        $int_zona = 5;
-        $int_peso = 1001;
-        $options = array('compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP);
-        $cliente = new SoapClient($wsdl, $options);
-        try {
-            $results = $cliente->__call('getHotelAvailSearch', array($xml_data));   
-        } catch (SoapFault $Exception) {    
-            $error=$Exception;
-        }
-        error_reporting(E_ALL);
-        ini_set('display_errors','Off');
-        $xmlDoc = new DOMDocument();
-        $xmlDoc->loadXML($results);
-        $resultHotels=$xmlDoc->getElementsByTagName('hotelName');
-        
-        
-        
-        $i=1;
-        foreach ($resultHotels as $hotel) {       
-           $hoteldetail=$hotel->getElementsByTagName('hoteldetail')->item(0);
-           $hotelid=$hoteldetail->getElementsByTagName('hotelid')->item(0)->nodeValue;
-           $hotelname=$hoteldetail->getElementsByTagName('hotelname')->item(0)->nodeValue;
-           $hoteldesc=$hoteldetail->getElementsByTagName('hoteldesc')->item(0)->nodeValue;
-
-           $citywiselocation=$hoteldetail->getElementsByTagName('contactinfo')->item(0)->getElementsByTagName('citywiselocation')->item(0)->nodeValue;   
-           $address=$hoteldetail->getElementsByTagName('contactinfo')->item(0)->getElementsByTagName('address')->item(0)->nodeValue;   
-           $starrating=$hoteldetail->getElementsByTagName('starrating')->item(0)->nodeValue;
-           $minRate=$hoteldetail->getElementsByTagName('minRate')->item(0)->nodeValue;
-           $webService=$hoteldetail->getElementsByTagName('webService')->item(0)->nodeValue;
-           $image=$hoteldetail->getElementsByTagName('images')->item(0)->getElementsByTagName('imagepath')->item(0)->nodeValue;
-           $priceVal[]=$minRate;
-        }
-
-
-        foreach ($hotel->getElementsByTagName('ratedetail') as $ratedetail) {
-            foreach ($ratedetail->getElementsByTagName('rate') as $rate) {  
-
-                $ratetype=$rate->getElementsByTagName('ratetype')->item(0)->nodeValue;
-                $hotelPackage=$rate->getElementsByTagName('hotelPackage')->item(0)->nodeValue;
-                $roomtype=$rate->getElementsByTagName('roomtype')->item(0)->nodeValue;
-                $roombasis=$rate->getElementsByTagName('roombasis')->item(0)->nodeValue;
-                $roomTypeCode=$rate->getElementsByTagName('roomTypeCode')->item(0)->nodeValue;
-                $ratePlanCode=$rate->getElementsByTagName('ratePlanCode')->item(0)->nodeValue;
-
-                $validdays=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('validdays')->item(0)->nodeValue;
-                $wsKey=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('wsKey')->item(0)->nodeValue;
-                $extGuestTotal=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('extGuestTotal')->item(0)->nodeValue;
-                $roomTotal=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('roomTotal')->item(0)->nodeValue;
-                $servicetaxTotal=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('servicetaxTotal')->item(0)->nodeValue;
-                $discount=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('discount')->item(0)->nodeValue;
-                $commission=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('commission')->item(0)->nodeValue;
-                $originalRoomTotal=$rate->getElementsByTagName('ratebands')->item(0)->getElementsByTagName('originalRoomTotal')->item(0)->nodeValue;
-
-            }
-        }
-    }   
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
