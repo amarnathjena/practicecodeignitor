@@ -1,5 +1,5 @@
-    <h3>User Listing</h3>
-<fieldset>
+<h3>User Listing</h3>
+<fieldset class="tbl">
 <table border="0" class="width100" style="text-align: center;">
     <tr>
         <th>

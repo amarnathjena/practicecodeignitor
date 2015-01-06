@@ -97,3 +97,8 @@ root {
     background:#fff; color:black!important;
 }
 /****************************Pagination**************************/
+
+.tbl{
+    width:98%;
+    height:300px;
+}
