@@ -22,7 +22,7 @@ foreach($lists as $key=>$val){
             ".ucwords($val->name)."
         </td>
         <td>
-            ".date("d-m-Y", strtotime($val->dob))."
+            ".(($val->dob && $val->dob!="0000-00-00")?date("d-m-Y", strtotime($val->dob)):'')."
         </td>
         <td>
             ".ucfirst($val->permanent_address)."
@@ -34,7 +34,13 @@ foreach($lists as $key=>$val){
     </tr>";
 }
 echo "</table></fieldset>";
-include "footer.php";?>
+
+/******************  Pagination Links  *****************/
+echo "<div class='pagination_box'>".$this->pagination->create_links()."</div>"
+        . "<div class='clearrboth'></div>";
+/*******************************************************/
+
+include_once "footer.php";?>
 
  <script type="text/javascript">
      function editUser(id){

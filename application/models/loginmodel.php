@@ -23,7 +23,7 @@ class LoginModel extends CI_Model{
     }
     
     function validate_user($username, $password){
-        $this->db->from('user');
+        $this->db->from('users');
         $this->db->where('username',$username );
         $this->db->where( 'password', md5($password));
         $login = $this->db->get()->result();
@@ -43,7 +43,7 @@ class LoginModel extends CI_Model{
         return false;
     }
     function get_user($id, $all=0){
-        $this->db->from('user');
+        $this->db->from('users');
         if(!$all){
             $this->db->where('id',$id);
             $login = $this->db->get()->result();
@@ -62,6 +62,41 @@ class LoginModel extends CI_Model{
         
     }
     
+    /**
+     * This code is for pagination done by amar nath jena
+     * @param type $tbl
+     * @param type $where array
+     * @param type $order_by array
+     * @param type $group_by array
+     * @param type $qstart
+     * @param type $limit
+     * @return boolean
+     */
+    function pg_get_user($tbl, $where, $order_by, $group_by, $qstart, $limit){
+        $this->db->from($tbl);
+        if(count($where)){
+            unset($conditions);
+            foreach($where as $conditions)
+                $this->db->where($conditions);
+        }
+        if(count($order_by)){
+            unset($conditions);
+            foreach($order_by as $conditions)
+                $this->db->order_by($conditions);
+        }
+        if(count($group_by)){
+            unset($conditions);
+            foreach($group_by as $conditions)
+                $this->db->group_by($conditions);
+        }
+        
+        $records = $this->db->get('', $limit, $qstart)->result();// table_name, how_many, from_which_index
+//        echo $this->db->last_query();
+        if (is_array($records) && count($records)) {
+            return $records;
+        }
+        return false;
+    }
     function changePassword($data){
         $this->db->where('id',$data['id']);
         $this->db->where( 'password', md5($data['currentpassword']));
@@ -69,16 +104,16 @@ class LoginModel extends CI_Model{
         unset($data['id']);
         $data['password'] = md5($data['newpassword']);
         unset($data['newpassword']);
-        if($this->db->update("user", $data))
+        if($this->db->update("users", $data))
             return true;
         else
             return false;
     }
     
     function deleteUser($id){
-        $this->db->from('user');
+        $this->db->from('users');
         $this->db->where('id',$id);
-        echo $this->db->delete("user", $data);
+        echo $this->db->delete("users", $data);
     }
 }
 ?>

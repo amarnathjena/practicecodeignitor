@@ -17,7 +17,6 @@ class Login extends CI_Controller {
 	public function index(){
              // Getting logged in user's id
             $userdata['msg'] = $this->session->userdata("msg");
-//            pr($userdata);
             $this->session->unset_userdata("msg");
             if($this->uid){
                 $this->session->set_userdata(array(
@@ -70,7 +69,7 @@ class Login extends CI_Controller {
                 $userdata["id"] = $this->input->post('id');
             }
             if($this->regFormValidation($userdata)){
-                $this->loginmodel->insert_user('user', $userdata);
+                $this->loginmodel->insert_user('users', $userdata);
                 if(!$userdata["id"])
                     redirect("login");
                 else{
@@ -110,15 +109,42 @@ class Login extends CI_Controller {
             redirect("login");
         }
         
-        function listing(){
+        function listing($qstart){
+//            $config['enable_query_strings'] = TRUE;
+//            $this->uri->segment(3);
+            
+            /** With the above code, we can be used independently to get url data and if function 
+            have argument variable then the 3rd segment of url/address bar will be available in the 
+            first argument as per codeigniter **/
+                        
+            
+            /***** Codes start for Pagination after loading pagination library
+            Through these codes we can just show the number of links for pagination but not records. In below
+            code we are showing the records.
+             */
+            $qstart = $qstart ? $qstart : 0;
+            $config['base_url'] = LBL_SITE_URL.'/index.php/'.strtolower(__CLASS__).'/'.__FUNCTION__;
+            $this->load->model('loginmodel');
+            $id = $this->session->userdata('id');
+            $totrows = count($this->loginmodel->get_user($id, 1));
+            $config['cur_tag_open'] = "<a class='page_current'>";
+            $config['cur_tag_close'] = "</a>";
+            $config['total_rows'] = $totrows;
+            $config['per_page'] = 3;
+            $order_by = array('name ASC');
+            $group_by = array();
+            $this->pagination->initialize($config); 
+            // Codes end for pagination then we need to add links to view (echo $this->pagination->create_links();) ******
+            
             if($this->uid){
                 $msg['msg'] = $this->session->userdata('msg');
-                $id = $this->session->userdata('id');
                 $this->session->unset_userdata("msg");
-                $this->load->model('loginmodel');
-                $data['lists'] = $this->loginmodel->get_user($id, 1);
+                
+                // Here is code for showing the number of required results/records in pagination page.
+                $data['lists'] = $this->loginmodel->pg_get_user('users', array("id != '$id'"), $order_by, $group_by, $qstart, $config['per_page']);
+                
                 $msg = array_merge($data, $msg);
-                $userdata['name'] = $this->session->userdata("name");                
+                $userdata['name'] = $this->session->userdata("name");
                 $this->load->view('header', $msg);
                 $this->load->view('userlisting', $msg);
             }else{

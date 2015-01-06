@@ -176,7 +176,9 @@ if (defined('ENVIRONMENT'))
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
-
+        define('LBL_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].'/'.  basename(__DIR__).'/');
+        define('APP_ROOT', __DIR__ .'/');
+        
 	// The path to the "application" folder
 	if (is_dir($application_folder))
 	{
