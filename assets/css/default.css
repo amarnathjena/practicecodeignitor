@@ -1,0 +1,76 @@
+/* 
+    Document   : default
+    Created on : 23 Dec, 2014, 9:02:28 AM
+    Author     : ptblr1096
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.table {
+    display: table;
+    width: 100%;
+/*    border: 1px solid black;*/
+    border-collapse: collapse;
+}
+.row {
+    display: table-row;
+}
+.cell {
+    display: table-cell;
+/*    border: 1px solid #CCC*/
+}
+.fltlft{
+    float: left; 
+}
+.fltrht{
+    float: right; 
+}
+.flttop{
+    text-align: top;
+}
+
+.error{
+    color: red;
+}
+.error:before{
+    content: ' ';
+    display: block;
+}
+
+.width130 {
+    width: 130%;
+}
+.width10 {
+    width: 10%;
+}
+.width20 {
+    width: 20%;
+}
+.width30 {
+    width: 30%;
+}
+.width40 {
+    width: 40%;
+}
+.width50 {
+    width: 50%;
+}
+.width60 {
+    width: 60%;
+}
+.width70 {
+    width: 70%;
+}
+.width80 {
+    width: 80%;
+}
+.width90 {
+    width: 90%;
+}
+.width100 {
+    width: 100%;
+}
