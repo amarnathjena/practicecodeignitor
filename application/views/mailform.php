@@ -3,7 +3,7 @@
 ?>
 <script src="//cdn.ckeditor.com/4.4.6/standard-all/ckeditor.js"></script>
 
-<form action="<?php echo base_url();?>mailsys/mailsend" enctype="multipart/form-data" method="post">
+<form action="<?php echo base_url();?>index.php/mailsys/mailsend" enctype="multipart/form-data" method="post">
     <fieldset>
         <legend><strong>Mail Form</strong></legend>
         <table class="tbl_list">
