@@ -123,7 +123,7 @@ table tr td a.slct_bg{background: #ECA886!important;color: #fff!important; font-
 .tbl_list tr td:nth-child(even){
 	text-align: left;
 }
-.tbl_list tr td input, textarea{
+.tbl_list tr td input:text, textarea{
 	width:100%;
 }
 /****************************Table END*********************************/
