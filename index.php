@@ -18,8 +18,8 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-//	define('ENVIRONMENT', 'development');
-	define('ENVIRONMENT', 'testing');
+	define('ENVIRONMENT', 'development');
+//	define('ENVIRONMENT', 'testing');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -176,10 +176,7 @@ if (defined('ENVIRONMENT'))
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
-        define('LBL_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].'/'.  basename(__DIR__).'/');
-        define('APP_ROOT', __DIR__ .'/');
-        
-	// The path to the "application" folder
+        // The path to the "application" folder
 	if (is_dir($application_folder))
 	{
 		define('APPPATH', $application_folder.'/');
@@ -194,6 +191,10 @@ if (defined('ENVIRONMENT'))
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
 
+        define('LBL_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].'/'.  basename(__DIR__).'/');
+        define('APP_ROOT', __DIR__ .'/');
+        define('VIEWS_DIR', APPPATH.'/views/');
+        
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
