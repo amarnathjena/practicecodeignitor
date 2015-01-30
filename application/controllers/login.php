@@ -131,6 +131,7 @@ class Login extends CI_Controller {
             $config['cur_tag_close'] = "</a>";
             $config['total_rows'] = $totrows;
             $config['per_page'] = 3;
+            //$config['uri_segment'] = 4;// it will be times when pagination link will be change to $config['base_url'].'/page'
             $order_by = array('name ASC');
             $group_by = array();
             $this->pagination->initialize($config); 
