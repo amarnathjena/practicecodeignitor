@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Calendar_Practice extends CI_Controller {
+class CalendarPractice extends CI_Controller {
 
         function __construct() {
             parent::__construct();
@@ -8,8 +8,8 @@ class Calendar_Practice extends CI_Controller {
         }
         
 	public function index(){
-         $this->load->model('calendar_practice_model');
-         $this->CalendarPracticeModel->get_event_calendar();
+         $this->load->model('calendarpracticemodel');
+         $this->calendarpracticemodel->get_event_calendar();
 	}
 }
 
