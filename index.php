@@ -191,6 +191,7 @@ if (defined('ENVIRONMENT'))
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
 
+        define('PROJECT_NAME', 'Practice Codeigniter Project');
         define('LBL_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].'/'.  basename(__DIR__).'/');
         define('APP_ROOT', __DIR__ .'/');
         define('VIEWS_DIR', APPPATH.'/views/');
