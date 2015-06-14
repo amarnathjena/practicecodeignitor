@@ -94,6 +94,7 @@ class Login extends CI_Controller {
                 $this->session->set_userdata(array(
                 'msg'=>"You have successfully logged in."
                 ));
+                redirect("dashboard");
             }else
                 $this->session->set_userdata(array(
                 'msg'=>"Failed to logged in."

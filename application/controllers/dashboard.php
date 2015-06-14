@@ -13,6 +13,9 @@ class Dashboard extends CI_Controller {
             $this->load->library('form_validation');
             
             $this->uid = $this->session->userdata('id');
+            if(!$this->uid){
+               redirect("/"); 
+            }
         }
 	public function index(){
              $this->load->view("dashboard");
