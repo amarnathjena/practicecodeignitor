@@ -9,6 +9,8 @@ class CalendarPractice extends CI_Controller {
         
 	public function index(){
          $this->load->model('calendarpracticemodel');
+         echo "<style type='text/css'>.calendar_td_week{vertical-alignment:top;}"
+                 . "</script>";
          $this->calendarpracticemodel->get_event_calendar();
 	}
 }

@@ -50,7 +50,7 @@ class CalendarPracticeModel extends CI_Model {
         $query = $this->db->query($query1);
         $result = $query->result_array();
         foreach ( $result as $row) {
-            $cal_content[date('m', strtotime($row['dob']))] .= $row['username']."<br/>";
+            $cal_content[date('n', strtotime($row['dob']))] .= $row['username']."<br/>";
         }
         print_r($cal_content);
         echo $this->calendar->generate($year, $month, $cal_content);

@@ -211,6 +211,125 @@ class Login extends CI_Controller {
             }
             return true;
         }
+    function debasish(){
+//        error_reporting(E_ALL);ini_set("display_errors");
+        $url = "https://www.facebook.com/feeds/page.php?format=atom10&id=135341749861609";
+        $agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_USERAGENT, $agent); //make it act decent
+        curl_setopt($ch, CURLOPT_URL, $url);         //set the $url to where your request goes
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //set this flag for results to the variable
+        curl_setopt($ch, CURLOPT_POST, 1);           //if you're making a post, put the data here
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post); //as a key/value pair in $post
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); //This is required for HTTPS certs if
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); //you don't have some key/password action
+
+        /* execute the request */
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = $this->xml2array($result);
+        pr(($result), 1);
+    }
+        
+    //Converting Xml to Array.
+    function xml2array($contents, $get_attributes = 1) {
+
+        /**
+         * xml2array() will convert the given XML text to an array in the XML structure.
+         * Link: http://www.bin-co.com/php/scripts/xml2array/
+         * Arguments : $contents - The XML text
+         * $get_attributes - 1 or 0. If this is 1 the function will get the attributes as well as the tag values - this results in a different 							array structure in the return value.
+         * Return: The parsed XML in an array form.
+         */
+        if (!$contents)
+            return array();
+
+        if (!function_exists('xml_parser_create')) {
+            //print "'xml_parser_create()' function not found!";
+            return array();
+        }
+        //Get the XML parser of PHP - PHP must have this module for the parser to work
+        $parser = xml_parser_create();
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+        xml_parse_into_struct($parser, $contents, $xml_values);
+        xml_parser_free($parser);
+
+        if (!$xml_values)
+            return; //Hmm...
+
+
+
+            
+// Initializations
+        $xml_array = array();
+        $parents = array();
+        $opened_tags = array();
+        $arr = array();
+
+        $current = &$xml_array;
+
+        //Go through the tags.
+        foreach ($xml_values as $data) {
+            unset($attributes, $value); //Remove existing values, or there will be trouble
+            //This command will extract these variables into the foreach scope
+            // tag(string), type(string), level(int), attributes(array).
+            extract($data); //We could use the array by itself, but this cooler.
+
+            $result = '';
+            if ($get_attributes) {//The second argument of the function decides this.
+                $result = array();
+                if (isset($value))
+                    $result['value'] = $value;
+
+                // Set the attributes too.
+                if (isset($attributes)) {
+                    foreach ($attributes as $attr => $val) {
+                        if ($get_attributes == 1)
+                            $result['attr'][$attr] = $val; // Set all the attributes in a array called 'attr'
+                        /** : TODO: should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
+                    }
+                }
+            } elseif (isset($value)) {
+                $result = $value;
+            }
+
+            // See tag status and do the needed.
+            if ($type == "open") { // The starting of the tag "
+                $parent[$level - 1] = &$current;
+
+                if (!is_array($current) or ( !in_array($tag, array_keys($current)))) { // Insert New tag
+                    $current[$tag] = $result;
+                    $current = &$current[$tag];
+                } else { // There was another element with the same tag name
+                    if (isset($current[$tag][0])) {
+                        array_push($current[$tag], $result);
+                    } else {
+                        $current[$tag] = array($current[$tag], $result);
+                    }
+                    $last = count($current[$tag]) - 1;
+                    $current = &$current[$tag][$last];
+                }
+            } elseif ($type == "complete") { // Tags that ends in 1 line "
+                // See if the key is already taken.
+                if (!isset($current[$tag])) { // New Key
+                    $current[$tag] = $result;
+                } else { // If taken, put all things inside a list(array)
+                    if ((is_array($current[$tag]) and $get_attributes == 0)//If it is already an arrayâ€¦
+                            or ( isset($current[$tag][0]) and is_array($current[$tag][0]) and $get_attributes == 1)) {
+                        array_push($current[$tag], $result); // â€¦push the new element into that array.
+                    } else { //If it is not an arrayâ€¦
+                        $current[$tag] = array($current[$tag], $result); //â€¦Make it an array using using the existing value and the new value
+                    }
+                }
+            } elseif ($type == 'close') { //End of tag "
+                $current = &$parent[$level - 1];
+            }
+        }
+
+        return($xml_array);
+    }
 }
 
 /* End of file welcome.php */
