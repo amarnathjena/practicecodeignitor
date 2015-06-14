@@ -109,7 +109,7 @@
                     </div>
                     <div class="pull-right dropdown ">
                         <div class="row dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true">
-                            <a href="#">Welcome <?php echo ucwords($uname); ?> 
+                            <a href="#">Welcome <?php echo $profileimage ? "<img src='' />":"<span class='glyphicon-user'></span>"; echo ucwords($uname); ?> 
                             <span class="caret"></span>
                             </a>
                         </div>
@@ -136,7 +136,24 @@
         <div class="container col-md-12">
             <?php if($uid){ ?>
             <div class="col-md-2 panel panel-default">
-                Left Panel
+                <div class="col-xs-12">
+                    Home/Dashboard
+                </div>
+                <div class="col-xs-12">
+                    User Listing
+                </div>
+                <div class="col-xs-12">
+                    Calender
+                </div>
+                <div class="col-xs-12">
+                    CMS
+                </div>
+                <div class="col-xs-12">
+                    Product Listing
+                </div>
+                <div class="col-xs-12">
+                    Hotel Listing
+                </div>
             </div>
             <?php } ?>
             <div id="container" class="col-md-<?php echo $uid?10:12;?> panel panel-default">

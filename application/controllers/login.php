@@ -22,7 +22,7 @@ class Login extends CI_Controller {
                 $this->session->set_userdata(array(
                 'msg'=>$userdata['msg']
                 ));
-                redirect("login/listing");
+                redirect("dashboard");
             }else{
                 $this->load->view('header', $userdata);
                 $this->load->view('loginform');
