@@ -50,25 +50,6 @@
                 margin: 14px 0 14px 0;
                 padding: 12px 10px 12px 10px;
             }
-
-            #body{
-                margin: 0 15px 0 15px;
-            }
-
-            p.footer{
-                text-align: right;
-                font-size: 11px;
-                border-top: 1px solid #D0D0D0;
-                line-height: 32px;
-                padding: 0 10px 0 10px;
-                margin: 20px 0 0 0;
-            }
-
-            #container{
-                margin: 10px;
-                border: 1px solid #D0D0D0;
-                -webkit-box-shadow: 0 0 8px #D0D0D0;
-            }
             
             /* for datepicker in fancybox */
             .ui-tooltip{
@@ -86,6 +67,18 @@
         <!-- Add fancyBox main JS and CSS files -->
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+        
+        <!-- get introduce bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap/bootstrap.min.css">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap/bootstrap-theme.min.css">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">-->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="<?php echo base_url();?>assets/bootstrap/bootstrap.min.js"></script>
+        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+        <!-- boogstrap integration ended -->
         
         <script type="text/javascript">
             function reset_form(){
@@ -107,11 +100,31 @@
             $uid = $this->session->userdata('id');
             $uname = $this->session->userdata('username');
             if($uid){ ?>
-                <div style="text-align:right;">
-                    Welcome <?php echo ucwords($uname); $siteurl = base_url()."index.php/";?> <br/>
-                    <a href='<?php echo $siteurl; ?>login/registrationform'>Edit Profile</a>
-                    <a href='<?php echo $siteurl; ?>login/changepassword'>Change Password</a>
-                    <a href='<?php echo $siteurl; ?>login/logout'>Logout</a>
+                <script type="text/javascript">
+                    var siteurl = '<?php echo $siteurl;?>';
+                </script>
+                <div class="page-header col-md-12 row fixed">
+                    <div class="col-md-10 text-center h2">
+                        WELCOME to <?php echo PROJECT_NAME;?>
+                    </div>
+                    <div class="pull-right dropdown ">
+                        <div class="row dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true">
+                            <a href="#">Welcome <?php echo ucwords($uname); ?> 
+                            <span class="caret"></span>
+                            </a>
+                        </div>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDivider">
+                            <li role="presentation" class="dropdown-header">
+                                <a href='<?php echo $siteurl; ?>login/registrationform'>Edit Profile</a>
+                            </li>
+                            <li role="presentation" class="dropdown-header">
+                                <a href='<?php echo $siteurl; ?>login/changepassword'>Change Password</a>
+                            </li>
+                            <li role="presentation" class="dropdown-header">
+                                <a href='<?php echo $siteurl; ?>login/logout'>Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                     <br/><br/>
                     
@@ -119,5 +132,9 @@
                 ?>
                 <h2>Welcome to Test CodeIgniter</h2>
         <?php }}?>
-        <div id="sessmsg" class="red"><?php if($msg) echo $msg;?></div>
-        <div id="container">
+        <div id="sessmsg" class="red col-sm-12"><?php if($msg) echo $msg;?></div>
+        <div class="container col-md-12">
+            <div class="col-md-2 panel panel-default">
+                Left Panel
+            </div>
+            <div id="container" class="col-md-10 panel panel-default">
