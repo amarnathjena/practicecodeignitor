@@ -1,6 +1,5 @@
 <h3>User Listing</h3>
-<fieldset class="tbl">
-<table border="0" class="tbl_list" style="text-align: center;">
+<table class="table  table-bordered">
     <tr>
         <th>
             Name
@@ -33,7 +32,7 @@ foreach($lists as $key=>$val){
         </td>
     </tr>";
 }
-echo "</table></fieldset>";
+echo "</table>";
 
 /******************  Pagination Links  *****************/
 echo "<div class='pagination_box'>".$this->pagination->create_links()."</div>"
