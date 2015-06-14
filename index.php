@@ -194,6 +194,7 @@ if (defined('ENVIRONMENT'))
         define('LBL_SITE_URL', 'http://'.$_SERVER['HTTP_HOST'].'/'.  basename(__DIR__).'/');
         define('APP_ROOT', __DIR__ .'/');
         define('VIEWS_DIR', APPPATH.'/views/');
+        $siteurl = LBL_SITE_URL."/";
         
 /*
  * --------------------------------------------------------------------
