@@ -24,7 +24,7 @@
 <div id="registration_div">
     <div id="validation_error"><?php echo validation_errors(); ?></div>
     <h2>Registration Form</h2>
-    <form action="<?php echo base_url(); ?>index.php/login/registration" method="post" onSubmit="return validateForm();" name="regform" id="regform">
+    <form action="<?php echo base_url(); ?>login/registration" method="post" onSubmit="return validateForm();" name="regform" id="regform">
         <fieldset>
             <legend>Personal Details</legend>
             <div class="table">
@@ -90,7 +90,7 @@ echo $username ? 'readonly="readonly' : '"'; ?>"></div>
                 <div class="cell width40">&nbsp;</div>
                 <div class="cell"><br/><br/><input type="submit" name="regsubmit" value="<?php echo ($id ? 'Update' : 'Submit'); ?>">
                     <input type="button" id="regresetbtn" value="Reset" onClick="reset_form();">
-                    <input type="button" id="cancel" value="Cancel" onClick="javascript:window.location.href='<?php echo base_url() . 'index.php/login'; ?>'">
+                    <input type="button" id="cancel" value="Cancel" onClick="javascript:window.location.href='<?php echo base_url() . 'login'; ?>'">
                 </div>
             </div>
         </div>

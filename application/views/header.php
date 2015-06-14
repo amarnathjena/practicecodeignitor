@@ -115,13 +115,13 @@
                         </div>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDivider">
                             <li role="presentation" class="dropdown-header">
-                                <a href='<?php echo $siteurl; ?>login/registrationform'>Edit Profile</a>
+                                <a href='<?php echo base_url(); ?>login/registrationform'>Edit Profile</a>
                             </li>
                             <li role="presentation" class="dropdown-header">
-                                <a href='<?php echo $siteurl; ?>login/changepassword'>Change Password</a>
+                                <a href='<?php echo base_url(); ?>login/changepassword'>Change Password</a>
                             </li>
                             <li role="presentation" class="dropdown-header">
-                                <a href='<?php echo $siteurl; ?>login/logout'>Logout</a>
+                                <a href='<?php echo base_url(); ?>login/logout'>Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -132,9 +132,11 @@
                 ?>
                 <h2>Welcome to Test CodeIgniter</h2>
         <?php }}?>
-        <div id="sessmsg" class="red col-sm-12"><?php if($msg) echo $msg;?></div>
+        <div id="sessmsg" class="red col-sm-12 center-block text-center alert-warning h4"><?php if($msg) echo $msg;?></div>
         <div class="container col-md-12">
+            <?php if($uid){ ?>
             <div class="col-md-2 panel panel-default">
                 Left Panel
             </div>
-            <div id="container" class="col-md-10 panel panel-default">
+            <?php } ?>
+            <div id="container" class="col-md-<?php echo $uid?10:12;?> panel panel-default">

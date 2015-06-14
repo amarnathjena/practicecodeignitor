@@ -14,30 +14,30 @@
 </script>
 
 <div id="login_div">
-    <h4>Login Form</h4>
-    <form action="<?php echo base_url(); ?>index.php/login/logincheck" method="post" name="loginform" id="loginform" onSubmit="return validateForm();">
-        <table>
-            <tr>
-                <td>Username : </td>
-                <td><input type="text" name="username" id="login_username" class="log"></td>
-            </tr>
-            <tr>
-                <td>Password : </td>
-                <td><input type="password" name="password" id="login_password" class="log"></td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" name="loginsubmit" value="Login">
-                    <input type="button" id="loginresetbtn" value="Reset" onclick="reset_form();">
-                </td>
-            </tr>
-        </table>
+    <div class="h4">Login Form</div>
+    <form action="<?php echo base_url(); ?>login/logincheck" method="post" name="loginform" id="loginform" onSubmit="return validateForm();">
+        <div class="table">
+            <div class="row">
+                <div class="td">Username : </div>
+                <div class="td"><input type="text" name="username" id="login_username" class="log form-control"></div>
+            </div>
+            <div class="row">
+                <div class="td">Password : </div>
+                <div class="td"><input type="password" name="password" id="login_password" class="log form-control"></div>
+            </div>
+            <div class="row">
+                <div class="td">&nbsp;</div>
+                <div class="td">
+                    <input type="submit" name="loginsubmit" value="Login" class="btn btn-default">
+                    <input type="button" id="loginresetbtn" value="Reset" class="btn btn-default" onclick="reset_form();">
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
 <div>
-    <a href="<?php echo base_url(); ?>index.php/login/registrationform" title="Click to Registration">New User ?</a>
+    <a href="<?php echo base_url(); ?>login/registrationform" title="Click to Registration">New User ?</a>
 </div>
 
 
